@@ -1,3 +1,5 @@
+from typing import Dict, Any
+
 import pandas as pd
 import numpy as np
 import requests
@@ -54,6 +56,7 @@ data_ev_chargers['yearCreated'] = pd.DatetimeIndex(data_ev_chargers['dateCreated
 # chargers: create a new dataframe with number chargers installed each year and rolling summary
 chargers_installed = data_ev_chargers.groupby('yearCreated')['chargeDeviceID'].count().reset_index(name='num_charges')
 chargers_installed['rollingSUM'] = chargers_installed['num_charges'].cumsum()
+print(chargers_installed)
 
 # chargers: displaying modified data_ev_chargers table info
 print(data_ev_chargers.info())
@@ -128,7 +131,7 @@ ax.set_ylabel('Number cars', fontsize=14)
 ax.set_title('ULEVs registered for the first time in the UK')
 ax.legend()
 
-# bar chart BEV + PHEV registered to EV-Chargers installed per year
+# line chart BEV + PHEV registered to EV-Chargers installed per year
 
 # merge cars and chargers data frames for the plot
 ev_merged = chargers_installed.merge(data_ev_cars, how='inner', left_on='yearCreated', right_on='Date')
@@ -176,6 +179,6 @@ chargers_avail = np.array(ev_chargers_in_service['rollingSUM_in_service'])
 ratio = plug_array / chargers_avail
 
 # creating a dictionary for ratio in 2020
-ratio_2020_dict = {'2020': ratio[8]}
+ratio_2020_dict: Dict[str, Any] = {'2020': ratio[8]}
 
 print(ratio_2020_dict)
